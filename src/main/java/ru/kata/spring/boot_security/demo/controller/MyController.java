@@ -46,7 +46,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
         @PostMapping()
         public String create(@ModelAttribute("user") User user) {
             userService.save(user);
-            return "redirect:/users";
+            return "redirect:/admin";
         }
 
         @GetMapping("/{id}/edit")
@@ -59,13 +59,13 @@ import ru.kata.spring.boot_security.demo.service.UserService;
         public String update(@ModelAttribute("user") User user,
                              @PathVariable("id") Long id) {
             userService.updateUser(id, user);
-            return "redirect:/users";
+            return "redirect:/admin";
         }
 
         @DeleteMapping("/{id}")
         public String delete(@PathVariable("id") Long id) {
             userService.deleteUser(id);
-            return "redirect:/users";
+            return "redirect:/admin";
         }
     }
 

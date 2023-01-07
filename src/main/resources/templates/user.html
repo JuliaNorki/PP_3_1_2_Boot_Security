@@ -6,6 +6,13 @@
 <body>
 <h1>User, welcome spring boot security page!</h1>
 
-
+<p th:text="${user.getId()}">VALUE</p>
+<p th:text="${user.getName()}">VALUE</p>
+<p th:text="${user.getLastname()}">VALUE</p>
+<p th:text="${user.getAge()}">VALUE</p>
+<p th:text="${user.getRoles()}">VALUE</p>
+<p th:text="${user.getPassword()}">VALUE</p>
+<br><br>
+<a href="/logout" type="submit">Logout</a>
 </body>
 </html>
