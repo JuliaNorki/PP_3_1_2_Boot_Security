@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserRepository;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
@@ -41,8 +41,6 @@ public class UserServiceImpl implements UserService{
     public void save(User user) {
        user.setPassword(user.getPassword());
        userRepository.saveAndFlush(user);
-
-
     }
 
     @Override
@@ -57,6 +55,7 @@ public class UserServiceImpl implements UserService{
            userRepos.setLastname(user.getLastname());
            userRepos.setAge(user.getAge());
            userRepos.setName(user.getName());
+           userRepos.setRole(user.getRoles());
            userRepository.save(userRepos);
        }else {
            throw new UsernameNotFoundException(String.format("User  - %s not found", user));

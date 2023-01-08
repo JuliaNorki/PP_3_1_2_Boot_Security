@@ -18,4 +18,5 @@ public interface UserService extends UserDetailsService {
 
     public void deleteUser(Long id);
     public User getUserByUsername(String username);
+
 }

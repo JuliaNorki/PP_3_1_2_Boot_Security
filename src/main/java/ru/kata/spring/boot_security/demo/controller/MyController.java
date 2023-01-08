@@ -6,66 +6,54 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.security.Principal;
 
 
 //Spring MVC + CRUD
 
 
-    @Controller
-    @RequestMapping("/admin")
-    public class MyController {
+@Controller
+@RequestMapping("admin")
+public class MyController {
+    private final UserService userService;
+    private final RoleService roleService;
 
-
-        private final UserService userService;
-
-        @Autowired
-        MyController(UserService userService) {
-            this.userService = userService;
-        }
-
-        @GetMapping()
-
-        public String getAllUsers(Model model) {
-            model.addAttribute("users", userService.getAllUsers());
-            return "index";
-        }
-
-
-        @GetMapping("/{id}")
-        public String show(@PathVariable("id") Long id, Model model) {
-            model.addAttribute("user", userService.getUser(id));
-            return "show";
-        }
-
-        @GetMapping("/new")
-        public String addUser(@ModelAttribute("user") User user) {
-            return "new";
-        }
-
-        @PostMapping()
-        public String create(@ModelAttribute("user") User user) {
-            userService.save(user);
-            return "redirect:/users";
-        }
-
-        @GetMapping("/{id}/edit")
-        public String edit(Model model, @PathVariable("id") Long id) {
-            model.addAttribute("user", userService.getUser(id));
-            return "edit";
-        }
-
-        @PatchMapping("/{id}")
-        public String update(@ModelAttribute("user") User user,
-                             @PathVariable("id") Long id) {
-            userService.updateUser(id, user);
-            return "redirect:/users";
-        }
-
-        @DeleteMapping("/{id}")
-        public String delete(@PathVariable("id") Long id) {
-            userService.deleteUser(id);
-            return "redirect:/users";
-        }
+    @Autowired
+    public MyController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
     }
+
+
+    @GetMapping()
+    public String showAdminPage(Model model, Principal principal) {
+        User userTest = userService.getUserByUsername(principal.getName());
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getRoles());
+        model.addAttribute("login", userTest);
+        return "adminPage";
+    }
+
+    @PutMapping("/{id}/update")
+    public String update(@ModelAttribute("user") User user,
+                         @PathVariable("id") Long id) {
+        userService.updateUser(id, user);
+        return "redirect:/admin";
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("user") User user) {
+        userService.save(user);
+        return "redirect:/admin";
+    }
+}
 
